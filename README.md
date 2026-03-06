@@ -17,7 +17,7 @@ Key architectural characteristics:
 - **Graph-based connection storage using Neo4j**
 - **JWT-based authentication and role-based authorization**
 - **Containerized deployment using Docker and Kubernetes**
-- 
+  
 The system separates responsibilities into independent services such as:
 
 * authentication
