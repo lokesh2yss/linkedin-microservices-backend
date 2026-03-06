@@ -1,28 +1,26 @@
-
 ---
 
 # LinkedIn Microservices Backend – Spring Boot
 
 A backend system that simulates the core functionality of a professional networking platform similar to **LinkedIn**.
 
-The system is built using **microservices architecture** with **Spring Boot**, **Apache Kafka**, and **Neo4j** to support scalable social networking operations including professional connections, posts, and personalized feeds.
+The system is implemented using **microservices architecture** with **Spring Boot**, **Apache Kafka**, **Neo4j**, and **Kubernetes** to support scalable social networking operations including user profiles, professional connections, posts, and personalized feeds.
 
-The project demonstrates how large social platforms structure distributed backend systems to handle millions of interactions efficiently.
+This project demonstrates how modern distributed backend systems are built and deployed using containerized microservices.
 
 ---
 
 # Application Overview
 
-The platform supports the following features:
+The platform supports core professional networking features:
 
-* user registration and authentication
-* professional networking connections
+* user authentication and profile management
+* professional connections
 * post creation and content sharing
-* feed generation for connected users
-* asynchronous event processing
-* scalable microservice communication
+* personalized feed generation
+* asynchronous event processing using Kafka
 
-Each major capability is implemented as an **independent microservice**.
+Each major capability is implemented as an independent **microservice** that communicates through REST APIs or Kafka events.
 
 ---
 
@@ -49,6 +47,11 @@ Each major capability is implemented as an **independent microservice**.
 * JWT Token Authentication
 * Role Based Authorization
 
+### Infrastructure
+
+* Docker
+* Kubernetes
+
 ### Tools
 
 * Maven
@@ -58,16 +61,16 @@ Each major capability is implemented as an **independent microservice**.
 
 # Microservices Architecture
 
-The system follows a **microservices architecture** where each service is responsible for a specific business capability.
+The system follows a **microservices architecture** where each service is responsible for a specific domain capability.
 
 Services communicate using:
 
-* **REST APIs** (synchronous communication)
-* **Kafka events** (asynchronous communication)
+* REST APIs (synchronous communication)
+* Kafka events (asynchronous communication)
 
 ---
 
-# Microservices Architecture Diagram
+# System Architecture Diagram
 
 ```mermaid
 graph TD
@@ -116,7 +119,7 @@ POST /signup
 POST /login
 ```
 
-Example authentication header:
+Authentication header example:
 
 ```
 Authorization: Bearer <JWT_TOKEN>
@@ -130,10 +133,9 @@ Responsible for managing user profiles.
 
 Features:
 
-* create user profile
+* create profile
 * update profile
-* retrieve profile information
-* manage professional details
+* fetch profile information
 
 Endpoints:
 
@@ -148,7 +150,7 @@ PUT /users/profile
 
 Manages professional network relationships.
 
-This service uses **Neo4j graph database** to efficiently represent and query social connections.
+Uses **Neo4j graph database** to efficiently store and query user connections.
 
 Graph representation:
 
@@ -160,7 +162,7 @@ Features:
 
 * send connection request
 * accept connection request
-* list connections
+* view connections
 * mutual connections
 
 Endpoints:
@@ -175,7 +177,7 @@ GET /connections/{userId}
 
 ## Post Service
 
-Handles creation and management of user posts.
+Handles content creation.
 
 Features:
 
@@ -191,35 +193,43 @@ DELETE /posts/{postId}
 GET /posts/{userId}
 ```
 
-When a post is created, the service publishes a **Kafka event**.
+When a post is created, the service publishes an **event to Kafka**.
 
 ---
 
 ## Feed Service
 
-Responsible for generating personalized feeds for users.
+Responsible for generating personalized feeds.
 
-Feeds are generated through **event-driven updates** from Kafka.
+Feeds are updated using **Kafka event streams**.
 
 Example workflow:
 
 ```
-User creates post → Kafka event → Feed Service updates feeds
+User creates post
+       |
+Post Service publishes event
+       |
+Kafka Topic
+       |
+Feed Service consumes event
+       |
+User feed updated
 ```
 
 ---
 
 ## Notification Service
 
-Responsible for notifying users when important events occur.
+Responsible for generating notifications.
 
 Examples:
 
 * connection request received
-* new post from a connection
+* new post from connection
 * message received
 
-The service listens to Kafka events.
+This service subscribes to Kafka topics.
 
 ---
 
@@ -227,7 +237,7 @@ The service listens to Kafka events.
 
 The platform uses **Apache Kafka** as the event streaming backbone.
 
-Kafka allows services to communicate asynchronously and remain loosely coupled.
+Kafka enables asynchronous communication between microservices.
 
 ---
 
@@ -246,7 +256,7 @@ FeedService --> UserFeedDB
 NotificationService --> NotificationDB
 ```
 
-Example events published to Kafka:
+Example events:
 
 ```
 PostCreatedEvent
@@ -268,7 +278,6 @@ Used for relational data:
 User
 Post
 Message
-ConnectionRequest
 Feed
 Notification
 ```
@@ -277,7 +286,7 @@ Notification
 
 ### Neo4j
 
-Used for social graph operations.
+Used for graph-based connection queries.
 
 Example graph:
 
@@ -286,19 +295,17 @@ Example graph:
 (User)-[:FOLLOWS]->(User)
 ```
 
-Neo4j enables efficient queries such as:
+Neo4j enables:
 
 * mutual connections
-* second degree connections
+* second-degree connections
 * network recommendations
 
 ---
 
 # Service Communication
 
-Two types of communication exist between services.
-
-### Synchronous Communication
+### Synchronous
 
 REST API calls.
 
@@ -310,9 +317,9 @@ Feed Service → User Service
 
 ---
 
-### Asynchronous Communication
+### Asynchronous
 
-Event streaming via Kafka.
+Kafka event streaming.
 
 Example:
 
@@ -324,7 +331,7 @@ Post Service → Kafka → Feed Service
 
 # Security
 
-Security is implemented using:
+Security features include:
 
 * JWT authentication
 * role-based authorization
@@ -334,7 +341,46 @@ All endpoints require authentication except login and signup.
 
 ---
 
-# Running the Project
+# Kubernetes Deployment
+
+The repository includes a **`k8s/` directory** containing Kubernetes configuration files for deploying the microservices.
+
+These files define Kubernetes resources such as:
+
+* Deployments
+* Services
+* Container configurations
+
+Kubernetes enables:
+
+* container orchestration
+* horizontal scalability
+* service discovery
+* automated deployment
+
+Example deployment workflow:
+
+```
+Build Docker images
+        |
+Push images to registry
+        |
+Apply Kubernetes manifests
+        |
+kubectl apply -f k8s/
+```
+
+Example command:
+
+```
+kubectl apply -f k8s/
+```
+
+This deploys the microservices into a Kubernetes cluster.
+
+---
+
+# Running the Project Locally
 
 Clone the repository:
 
@@ -348,7 +394,7 @@ Navigate to project directory:
 cd LinkedIn-Microservice-Backend
 ```
 
-Start required services:
+Start required infrastructure:
 
 ```
 Kafka
@@ -366,20 +412,20 @@ mvn spring-boot:run
 
 # Future Improvements
 
-Possible enhancements include:
+Potential enhancements include:
 
-* distributed feed generation
-* Redis caching
-* recommendation system
-* real-time notifications via WebSockets
-* containerization using Docker
-* Kubernetes deployment
+* Redis caching for feeds
+* recommendation engine
+* real-time notifications using WebSockets
+* service mesh integration
+* advanced Kubernetes scaling policies
 
 ---
 
 # Author
 
 Lokesh Kumar
+
 Senior Backend Engineer
 Java | Spring Boot | Distributed Systems
 
@@ -387,4 +433,3 @@ LeetCode
 [https://leetcode.com/u/lokeshtalks/](https://leetcode.com/u/lokeshtalks/)
 
 ---
-
