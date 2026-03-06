@@ -4,23 +4,45 @@
 
 A backend system that simulates the core functionality of a professional networking platform similar to **LinkedIn**.
 
-The system is implemented using **microservices architecture** with **Spring Boot**, **Apache Kafka**, **Neo4j**, and **Kubernetes** to support scalable social networking operations including user profiles, professional connections, posts, and personalized feeds.
+---
 
-This project demonstrates how modern distributed backend systems are built and deployed using containerized microservices.
+# System Design Summary
+
+This project demonstrates a **distributed microservices architecture** for a professional networking platform.
+
+Key architectural characteristics:
+
+• Microservices implemented using **Spring Boot**
+• **Event-driven communication using Apache Kafka**
+• **Graph-based connection storage using Neo4j**
+• **JWT-based authentication and role-based authorization**
+• **Containerized deployment using Docker and Kubernetes**
+
+The system separates responsibilities into independent services such as:
+
+* authentication
+* user profile management
+* professional connections
+* post creation
+* feed generation
+* notifications
+
+Each service can be developed, deployed, and scaled independently.
 
 ---
 
 # Application Overview
 
-The platform supports core professional networking features:
+The platform supports core LinkedIn-style functionality:
 
 * user authentication and profile management
-* professional connections
-* post creation and content sharing
-* personalized feed generation
-* asynchronous event processing using Kafka
+* professional connection graph
+* post creation and sharing
+* feed generation
+* event-driven updates
+* notification system
 
-Each major capability is implemented as an independent **microservice** that communicates through REST APIs or Kafka events.
+Each business capability is implemented as an independent **microservice**.
 
 ---
 
@@ -65,8 +87,8 @@ The system follows a **microservices architecture** where each service is respon
 
 Services communicate using:
 
-* REST APIs (synchronous communication)
-* Kafka events (asynchronous communication)
+* **REST APIs** (synchronous communication)
+* **Kafka events** (asynchronous communication)
 
 ---
 
@@ -110,7 +132,7 @@ Responsibilities:
 * user signup
 * user login
 * JWT token generation
-* role based access control
+* role-based access control
 
 Endpoints:
 
@@ -150,7 +172,7 @@ PUT /users/profile
 
 Manages professional network relationships.
 
-Uses **Neo4j graph database** to efficiently store and query user connections.
+Uses **Neo4j graph database** to efficiently represent and query connections.
 
 Graph representation:
 
@@ -343,27 +365,20 @@ All endpoints require authentication except login and signup.
 
 # Kubernetes Deployment
 
-The repository includes a **`k8s/` directory** containing Kubernetes configuration files for deploying the microservices.
+The repository includes a **`k8s/` directory** containing Kubernetes configuration files used to deploy the microservices.
 
-These files define Kubernetes resources such as:
+These manifests define:
 
 * Deployments
 * Services
 * Container configurations
 
-Kubernetes enables:
-
-* container orchestration
-* horizontal scalability
-* service discovery
-* automated deployment
-
-Example deployment workflow:
+Deployment workflow:
 
 ```
 Build Docker images
         |
-Push images to registry
+Push images to container registry
         |
 Apply Kubernetes manifests
         |
@@ -394,7 +409,7 @@ Navigate to project directory:
 cd LinkedIn-Microservice-Backend
 ```
 
-Start required infrastructure:
+Start required services:
 
 ```
 Kafka
@@ -417,8 +432,8 @@ Potential enhancements include:
 * Redis caching for feeds
 * recommendation engine
 * real-time notifications using WebSockets
+* advanced Kubernetes auto-scaling
 * service mesh integration
-* advanced Kubernetes scaling policies
 
 ---
 
@@ -433,3 +448,4 @@ LeetCode
 [https://leetcode.com/u/lokeshtalks/](https://leetcode.com/u/lokeshtalks/)
 
 ---
+
