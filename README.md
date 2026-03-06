@@ -2,7 +2,7 @@
 
 # LinkedIn Microservices Backend – Spring Boot
 
-Java | Spring Boot | PostgreSQL | PostGIS | JWT | System Design | Kafka | Neo4j | Kubernetes | Docker
+Java | Spring Boot | Kafka | Neo4j | PostgreSQL | JWT | Kubernetes | Microservices | System Design
 
 A backend system that simulates the core functionality of a professional networking platform similar to **LinkedIn**.
 
@@ -14,37 +14,28 @@ This project demonstrates a **distributed microservices architecture** for a pro
 
 Key architectural characteristics:
 
-- Microservices implemented using **Spring Boot**
-- **Event-driven communication using Apache Kafka**
-- **Graph-based connection storage using Neo4j**
-- **JWT-based authentication and role-based authorization**
-- **Containerized deployment using Docker and Kubernetes**
-  
-The system separates responsibilities into independent services such as:
+* Microservices implemented using **Spring Boot**
+* **Event-driven communication using Apache Kafka**
+* **Graph-based connection storage using Neo4j**
+* **JWT-based authentication and role-based authorization**
+* **Containerized deployment using Docker and Kubernetes**
 
-* authentication
-* user profile management
-* professional connections
-* post creation
-* feed generation
-* notifications
-
-Each service can be developed, deployed, and scaled independently.
+The system separates responsibilities into independent services such as authentication, user profiles, connections, posts, feed generation, and notifications.
 
 ---
 
 # Application Overview
 
-The platform supports core LinkedIn-style functionality:
+The platform supports core professional networking features including:
 
 * user authentication and profile management
-* professional connection graph
-* post creation and sharing
-* feed generation
-* event-driven updates
-* notification system
+* professional networking connections
+* post creation and content sharing
+* feed generation for connected users
+* event-driven updates using Kafka
+* notification services
 
-Each business capability is implemented as an independent **microservice**.
+Each capability is implemented as an independent **microservice**.
 
 ---
 
@@ -56,6 +47,7 @@ Each business capability is implemented as an independent **microservice**.
 * Spring Boot
 * Spring Data JPA
 * Spring Security
+* REST APIs
 
 ### Messaging
 
@@ -134,7 +126,7 @@ Responsibilities:
 * user signup
 * user login
 * JWT token generation
-* role-based access control
+* role based access control
 
 Endpoints:
 
@@ -290,6 +282,75 @@ MessageSentEvent
 
 ---
 
+# Feed Generation Request Flow
+
+This section describes how the system processes a new post created by a user.
+
+### Step 1 — User creates a post
+
+```
+POST /posts
+```
+
+The request contains:
+
+* userId
+* post content
+* media attachments (optional)
+
+---
+
+### Step 2 — Post Service persists the post
+
+```
+PostService → PostgreSQL
+```
+
+After saving the post, the service publishes a **PostCreatedEvent** to Kafka.
+
+---
+
+### Step 3 — Event published to Kafka
+
+```
+PostService → Kafka Topic (PostCreatedEvent)
+```
+
+---
+
+### Step 4 — Feed Service consumes event
+
+```
+Kafka → FeedService
+```
+
+Feed Service determines which users should see the post using the **Neo4j connection graph**.
+
+---
+
+### Step 5 — Feed entries created
+
+```
+FeedService → Feed Database
+```
+
+The feeds of connected users are updated.
+
+---
+
+### Step 6 — Notification Service generates notifications
+
+```
+Kafka → NotificationService
+```
+
+Example notifications:
+
+* “Your connection posted an update”
+* “New post from your network”
+
+---
+
 # Database Design
 
 The system uses **polyglot persistence**.
@@ -373,7 +434,7 @@ These manifests define:
 
 * Deployments
 * Services
-* Container configurations
+* container configurations
 
 Deployment workflow:
 
@@ -392,8 +453,6 @@ Example command:
 ```
 kubectl apply -f k8s/
 ```
-
-This deploys the microservices into a Kubernetes cluster.
 
 ---
 
@@ -442,7 +501,6 @@ Potential enhancements include:
 # Author
 
 Lokesh Kumar
-
 Senior Backend Engineer
 Java | Spring Boot | Distributed Systems
 
@@ -450,4 +508,3 @@ LeetCode
 [https://leetcode.com/u/lokeshtalks/](https://leetcode.com/u/lokeshtalks/)
 
 ---
-
