@@ -2,6 +2,8 @@
 
 # LinkedIn Microservices Backend – Spring Boot
 
+Java | Spring Boot | PostgreSQL | PostGIS | JWT | System Design | Kafka | Neo4j | Kubernetes | Docker
+
 A backend system that simulates the core functionality of a professional networking platform similar to **LinkedIn**.
 
 ---
