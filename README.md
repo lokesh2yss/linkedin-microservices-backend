@@ -10,14 +10,13 @@ A backend system that simulates the core functionality of a professional network
 
 This project demonstrates a **distributed microservices architecture** for a professional networking platform.
 
-Key architectural characteristics:
+•Key architectural characteristics:
 
-• Microservices implemented using **Spring Boot**
-• **Event-driven communication using Apache Kafka**
-• **Graph-based connection storage using Neo4j**
-• **JWT-based authentication and role-based authorization**
-• **Containerized deployment using Docker and Kubernetes**
-
+- Microservices implemented using **Spring Boot**
+- **Event-driven communication using Apache Kafka**
+- **Graph-based connection storage using Neo4j**
+- **JWT-based authentication and role-based authorization**
+- **Containerized deployment using Docker and Kubernetes**
 The system separates responsibilities into independent services such as:
 
 * authentication
