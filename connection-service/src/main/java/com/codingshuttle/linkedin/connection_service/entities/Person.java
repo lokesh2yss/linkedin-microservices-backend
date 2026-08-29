@@ -14,4 +14,6 @@ public class Person {
     private Long userId;
 
     private String name;
+
+    private String email;
 }

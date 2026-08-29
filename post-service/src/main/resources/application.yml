@@ -4,3 +4,15 @@ spring:
     producer:
       key-serializer: org.apache.kafka.common.serialization.LongSerializer
       value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+      properties:
+        # Reliability
+        acks: all
+        enable.idempotence: true
+        retries: 10
+        request.timeout.ms: 30000
+        retry.backoff.ms: 1000
+        delivery.timeout.ms: 120000
+
+        # Batching / throughput
+        batch.size: 32768
+        linger.ms: 5

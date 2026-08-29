@@ -31,7 +31,7 @@ spec:
           mountPath: /data
         - name: neo4j-logs
           mountPath: /logs
-          
+
       containers:
       - name: neo4j
         image: neo4j
@@ -45,15 +45,15 @@ spec:
         env:
         - name: NEO4J_AUTH
           value: "neo4j/password123"  # Set Neo4j username and password
-        - name: NEO4J_dbms_memory_heap_initial__size
+        - name: NEO4J_server_memory_heap_initial__size
           value: "512M"
-        - name: NEO4J_dbms_memory_heap_max__size
+        - name: NEO4J_server_memory_heap_max__size
           value: "2G"
-        - name: NEO4J_dbms_memory_pagecache_size
+        - name: NEO4J_server_memory_pagecache_size
           value: "512M"
         - name: NEO4J_ACCEPT_LICENSE_AGREEMENT
           value: "yes"
-        - name: NEO4J_dbms_default__listen__address
+        - name: NEO4J_server_default__listen__address
           value: "0.0.0.0"
         ports:
         - containerPort: 7687

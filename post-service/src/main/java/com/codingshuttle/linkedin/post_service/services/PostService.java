@@ -13,9 +13,11 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.kafka.core.KafkaTemplate;
+import org.springframework.kafka.support.SendResult;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
 
 @Service
 @RequiredArgsConstructor
@@ -35,7 +37,17 @@ public class PostService {
                         .content(savedPost.getContent())
                         .postId(savedPost.getId())
                         .build();
-        kafkaTemplate.send("post-created-topic", postCreatedEvent);
+
+        CompletableFuture<SendResult<Long, PostCreatedEvent>> future =
+                kafkaTemplate.send("post-created-topic", postCreatedEvent);
+
+        future.whenComplete((result, ex) -> {
+            if (ex != null) {
+                log.error("Failed to publish PostCreatedEvent", ex);
+            } else {
+                log.info("PostCreatedEvent published successfully");
+            }
+        });
         return modelMapper.map(savedPost, PostDto.class);
     }
 

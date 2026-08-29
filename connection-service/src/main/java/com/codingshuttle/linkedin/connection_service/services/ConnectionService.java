@@ -2,12 +2,11 @@ package com.codingshuttle.linkedin.connection_service.services;
 
 import com.codingshuttle.linkedin.connection_service.auth.UserContextHolder;
 import com.codingshuttle.linkedin.connection_service.entities.Person;
-import com.codingshuttle.linkedin.connection_service.events.AcceptConnectionRequestEvent;
-import com.codingshuttle.linkedin.connection_service.events.SendConnectionRequestEvent;
+import com.codingshuttle.linkedin.connection_service.kafka.events.AcceptConnectionRequestEvent;
+import com.codingshuttle.linkedin.connection_service.kafka.events.SendConnectionRequestEvent;
 import com.codingshuttle.linkedin.connection_service.repositories.PersonRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.neo4j.repository.query.Query;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 

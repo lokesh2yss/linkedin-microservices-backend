@@ -1,6 +1,6 @@
-package com.codingshuttle.linkedin.connection_service.configs;
+package com.codingshuttle.linkedin.user_service.configs;
 
-import com.codingshuttle.linkedin.connection_service.constants.AppConstants;
+import com.codingshuttle.linkedin.user_service.constants.AppConstants;
 import org.apache.kafka.clients.admin.NewTopic;
 import org.modelmapper.ModelMapper;
 import org.springframework.context.annotation.Bean;

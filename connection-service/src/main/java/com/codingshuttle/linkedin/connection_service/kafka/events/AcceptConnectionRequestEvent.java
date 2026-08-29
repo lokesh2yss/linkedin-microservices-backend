@@ -1,4 +1,4 @@
-package com.codingshuttle.linkedin.connection_service.events;
+package com.codingshuttle.linkedin.connection_service.kafka.events;
 
 import lombok.Builder;
 import lombok.Data;

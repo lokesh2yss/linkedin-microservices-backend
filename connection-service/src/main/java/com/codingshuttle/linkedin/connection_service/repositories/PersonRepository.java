@@ -60,4 +60,8 @@ public interface PersonRepository extends Neo4jRepository<Person, Long> {
             "WHERE p1.userId = $senderId AND p2.userId = $receiverId " +
             "DELETE r")
     void rejectConnectionRequest(Long senderUserId, Long receiverUserId);
+
+    @Query("CREATE (p: Person {name= $name, email: $email, userId = $userId}) " +
+            "Return p")
+    Person createNewUser(String name, String email, Long userId);
 }
