@@ -5,6 +5,24 @@ spring:
       group-id: ${spring.application.name}
       key-deserializer: org.apache.kafka.common.serialization.LongDeserializer
       value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
+      enable-auto-commit: true
+      auto-offset-reset: earliest
       properties:
         spring.json:
           trusted.packages: com.codingshuttle.linkedin.*
+        # Polling / consumer liveness
+        max.poll.interval.ms: 300000
+        max.poll.records: 500
+
+        # Broker request timeout
+        request.timeout.ms: 30000
+
+        # Heartbeat / group membership
+        heartbeat.interval.ms: 3000
+        session.timeout.ms: 10000
+
+        # Fetching records
+        fetch.min.bytes: 1
+        fetch.max.wait.ms: 500
+        fetch.max.bytes: 52428800
+        max.partition.fetch.bytes: 1048576
